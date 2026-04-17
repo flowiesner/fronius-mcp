@@ -29,3 +29,7 @@ def main(transport: str, host: str, port: int | None) -> None:
         mcp.run(transport="stdio")
     else:
         mcp.run(transport=transport, host=host, port=port)
+
+
+if __name__ == "__main__":
+    main()
