@@ -23,10 +23,11 @@ def solar_meter() -> dict:
     """
     Real-time data from the Fronius Smart Meter at the grid feed-in point.
 
-    Returns current grid power (power_w), total energy consumed from grid
-    (energy_consumed_wh), total energy fed into grid (energy_fed_wh), phase 1
-    voltage (voltage_v), phase 1 current (current_a), and grid frequency
-    (frequency_hz).
+    Returns total grid power (power_w), per-phase real power (power_l1/l2/l3_w),
+    total energy consumed from grid (energy_consumed_wh), total energy fed into
+    grid (energy_fed_wh), per-phase voltage and current (voltage/current_l1/l2/l3),
+    and grid frequency (frequency_hz). Positive power = importing from grid,
+    negative = exporting to grid.
     """
     return client.get_meter()
 
@@ -42,10 +43,23 @@ def solar_battery() -> dict:
     return client.get_battery()
 
 
+def solar_devices() -> dict:
+    """
+    Lists all devices currently connected to the Fronius inverter system.
+
+    Returns a dict with device classes (inverter, meter, storage, ohmpilot, etc.)
+    as keys. Each entry is a list of connected devices with their bus index and
+    serial number. Empty list means the device class is supported but nothing
+    is connected. Useful for verifying system topology or diagnosing missing devices.
+    """
+    return client.get_devices()
+
+
 _ALL_TOOLS: dict[str, Callable[[], dict]] = {
     "solar_power_flow": solar_power_flow,
     "solar_meter":      solar_meter,
     "solar_battery":    solar_battery,
+    "solar_devices":    solar_devices,
 }
 
 

@@ -7,6 +7,7 @@ TOOLSETS: dict[str, list[str]] = {
         "solar_power_flow",
         "solar_meter",
         "solar_battery",
+        "solar_devices",
     ],
     "history": [
         # power_history
