@@ -1,11 +1,12 @@
 import requests
 
-INVERTER_IP = "192.168.178.35"
-BASE_URL = f"http://{INVERTER_IP}/solar_api/v1"
+from fronius_mcp import config
 
 
 def get(endpoint: str, params: dict = None) -> dict:
-    r = requests.get(f"{BASE_URL}/{endpoint}", params=params, timeout=5)
+    host = config.get_host()
+    base_url = f"http://{host}/solar_api/v1"
+    r = requests.get(f"{base_url}/{endpoint}", params=params, timeout=5)
     r.raise_for_status()
     data = r.json()
     status = data["Head"]["Status"]

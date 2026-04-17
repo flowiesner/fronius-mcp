@@ -1,3 +1,5 @@
+import os
+
 from fronius_mcp.server import _ALL_TOOLS, build_server
 from fronius_mcp.toolsets import TOOLSETS, get_active_tools
 
@@ -27,3 +29,19 @@ def test_default_active_tools():
     assert "solar_power_flow" in active
     assert "solar_meter" in active
     assert "solar_battery" in active
+
+
+def test_configure_inverter_always_registered():
+    """configure_inverter must be in the tool list even when no toolset is active."""
+    env_backup = os.environ.pop("FRONIUS_TOOLSETS", None)
+    try:
+        os.environ["FRONIUS_TOOLSETS"] = "nonexistent"
+        mcp = build_server()
+        tool_names = {t.name for t in mcp._tool_manager.list_tools()}
+        assert "configure_inverter" in tool_names, "configure_inverter must always be registered"
+        assert "solar_power_flow" not in tool_names
+    finally:
+        if env_backup is None:
+            os.environ.pop("FRONIUS_TOOLSETS", None)
+        else:
+            os.environ["FRONIUS_TOOLSETS"] = env_backup
