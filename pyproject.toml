@@ -6,6 +6,9 @@ build-backend = "hatchling.build"
 name = "fronius-mcp"
 version = "0.1.0"
 description = "MCP server for Fronius Symo GEN24 solar system"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Florian Wiesner", email = "wiesner.florian@gmx.at" }]
 requires-python = ">=3.10"
 dependencies = [
     "mcp[cli]>=1.0.0",
