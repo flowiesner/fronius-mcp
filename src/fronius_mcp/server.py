@@ -7,6 +7,34 @@ from fronius_mcp import client, config
 from fronius_mcp.toolsets import get_active_tools
 
 
+_SETUP_GUIDE = """
+## Finding your inverter's IP address
+
+**Option A — Router:**
+Log into your router's admin interface (usually http://192.168.1.1 or http://192.168.178.1).
+Look for connected devices — the Fronius inverter typically appears as "Fronius" or "fronius-*".
+Note the assigned IP address.
+
+**Option B — Fronius Solar.web:**
+Log into https://www.solarweb.com → select your system → Settings → PV System →
+Communication → the local IP is listed there.
+
+**Option C — Inverter display:**
+On the inverter's touch display: Settings → Communication → LAN → IP Address.
+
+Once you have the IP, open http://<IP> in a browser — you should see the inverter's web interface.
+
+## Enabling the Solar API
+
+The local JSON API must be enabled in the inverter's web interface before the MCP tools will work:
+1. Open http://<IP> in a browser and log in (default technician PIN: 1234).
+2. Go to **Settings → Communication → Solar API**.
+3. Enable **JSON API** and save.
+
+Without this step the tools will fail even if the IP is correct.
+"""
+
+
 def configure_inverter(host: str) -> str:
     """
     Configure the Fronius inverter IP address or hostname.
@@ -14,11 +42,15 @@ def configure_inverter(host: str) -> str:
     Call this once to tell the MCP server where your inverter lives.
     The value is saved to ~/.fronius-mcp.json and persists across restarts.
 
+    Also returns instructions for finding the inverter IP and enabling the
+    Solar API — useful for first-time setup.
+
     Args:
         host: IP address or hostname of the inverter (e.g. '192.168.178.35').
               Scheme and port are stripped automatically.
 
-    Returns a confirmation message, or a warning if the inverter is unreachable.
+    Returns a confirmation message plus setup instructions, or a connectivity
+    warning if the inverter cannot be reached.
     """
     normalized = config._normalize_host(host)
     config.set_host(normalized)
@@ -26,13 +58,15 @@ def configure_inverter(host: str) -> str:
     try:
         socket.setdefaulttimeout(3)
         socket.getaddrinfo(normalized, 80)
-        return f"Inverter configured: {normalized}. Connection check passed."
+        status = f"Inverter configured: {normalized}. Connection check passed."
     except OSError:
-        return (
+        status = (
             f"Inverter configured: {normalized}. "
             "Warning: could not reach the inverter right now — "
             "check the IP and that the inverter is on the same network."
         )
+
+    return status + "\n" + _SETUP_GUIDE
 
 
 def solar_power_flow() -> dict:
