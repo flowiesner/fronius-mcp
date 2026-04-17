@@ -9,11 +9,9 @@ TOOLSETS: dict[str, list[str]] = {
         "solar_battery",
         "solar_devices",
     ],
-    "history": [
-        # power_history
-        # energy_history
-        # battery_soc_history
-    ],
+    # history toolset intentionally omitted:
+    # GetArchiveData.cgi returns 404 on the GEN24, and the Solar.web cloud API
+    # requires a manual developer account request — too much friction for users.
 }
 
 _DEFAULT_TOOLSETS = {"realtime"}
