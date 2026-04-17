@@ -1,10 +1,11 @@
+from collections.abc import Callable
+
 from mcp.server.fastmcp import FastMCP
-import fronius
 
-mcp = FastMCP("Fronius Solar")
+from fronius_mcp import client
+from fronius_mcp.toolsets import get_active_tools
 
 
-@mcp.tool()
 def solar_power_flow() -> dict:
     """
     Real-time power flow data from the Fronius Symo GEN24 inverter.
@@ -15,10 +16,9 @@ def solar_power_flow() -> dict:
     percentages, daily/yearly/total energy yields, operating mode, and battery
     standby state.
     """
-    return fronius.get_power_flow()
+    return client.get_power_flow()
 
 
-@mcp.tool()
 def solar_meter() -> dict:
     """
     Real-time data from the Fronius Smart Meter at the grid feed-in point.
@@ -28,10 +28,9 @@ def solar_meter() -> dict:
     voltage (voltage_v), phase 1 current (current_a), and grid frequency
     (frequency_hz).
     """
-    return fronius.get_meter()
+    return client.get_meter()
 
 
-@mcp.tool()
 def solar_battery() -> dict:
     """
     Real-time data from the BYD Battery-Box Premium HV.
@@ -40,8 +39,20 @@ def solar_battery() -> dict:
     temperature (temp_c), usable and design capacity in Wh, cell status,
     enabled flag, and manufacturer/model info.
     """
-    return fronius.get_battery()
+    return client.get_battery()
 
 
-if __name__ == "__main__":
-    mcp.run()
+_ALL_TOOLS: dict[str, Callable[[], dict]] = {
+    "solar_power_flow": solar_power_flow,
+    "solar_meter":      solar_meter,
+    "solar_battery":    solar_battery,
+}
+
+
+def build_server() -> FastMCP:
+    mcp = FastMCP("Fronius Solar")
+    active = get_active_tools()
+    for name, fn in _ALL_TOOLS.items():
+        if name in active:
+            mcp.tool()(fn)
+    return mcp
