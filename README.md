@@ -3,13 +3,26 @@
 Real-time solar data from your Fronius inverter, directly in Claude.
 
 Ask things like:
+
 > *"How much solar power am I generating right now?"*
+>
 > *"What's my battery charge level?"*
-> *"Am I importing or exporting to the grid?"*
+>
+> *"Am I currently importing or exporting to the grid?"*
+>
+> *"How much energy did I produce this year?"*
+>
 > *"What can you do with my solar system?"*
+>
 > *"Analyse my photovoltaics for me."*
 
-Connects to the **Fronius Solar API v1** on your local network — no cloud account required.
+Connects to the **Fronius Solar API v1** directly on your local network — no cloud account, no subscription, no data leaving your home.
+
+---
+
+## How it works
+
+fronius-mcp is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server. MCP is an open standard that lets AI assistants like Claude connect to external tools and data sources. Once configured, Claude can call your inverter's local API in real time — whenever you ask a question about your solar system, Claude fetches live data and answers based on what's actually happening right now.
 
 ---
 
@@ -17,15 +30,19 @@ Connects to the **Fronius Solar API v1** on your local network — no cloud acco
 
 - A Fronius inverter on your local network with the **Solar API (JSON API) enabled**
 - [Claude Desktop](https://claude.ai/download)
-- [`uv`](https://docs.astral.sh/uv/getting-started/installation/) installed
+- [`uv`](https://docs.astral.sh/uv/getting-started/installation/) — a fast Python package manager (one-line install)
 
 ---
 
 ## Setup
 
-### 1. Add to Claude Desktop
+### 1. Install uv
 
-Open your `claude_desktop_config.json` and add:
+Follow the [uv installation instructions](https://docs.astral.sh/uv/getting-started/installation/) for your platform. It's a single command and takes under a minute.
+
+### 2. Add to Claude Desktop
+
+Open your `claude_desktop_config.json` and add the `fronius` block inside `mcpServers`:
 
 ```json
 {
@@ -46,9 +63,11 @@ Open your `claude_desktop_config.json` and add:
 | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
 | Windows (Store app) | `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\claude_desktop_config.json` |
 
-### 2. Restart Claude Desktop
+### 3. Restart Claude Desktop
 
-### 3. Configure your inverter
+Close and reopen Claude Desktop so it picks up the new server config.
+
+### 4. Configure your inverter
 
 In a new Claude conversation, say:
 
@@ -56,7 +75,20 @@ In a new Claude conversation, say:
 
 Claude will save your inverter's IP and confirm the connection. This is a one-time step — the address is stored in `~/.fronius-mcp.json` and persists across restarts.
 
-**Don't know your inverter's IP?** Just ask Claude — `configure_inverter` includes step-by-step instructions for finding it via your router, Solar.web, or the inverter's display, plus how to enable the Solar API if you haven't already.
+**Don't know your inverter's IP?** No problem — just ask Claude to configure the inverter without specifying an IP. The `configure_inverter` tool includes step-by-step instructions for finding it via your router, Fronius Solar.web, or the inverter's touch display, plus how to enable the Solar API in the inverter's web interface if you haven't done that yet.
+
+---
+
+## What you can ask
+
+Once set up, just talk to Claude naturally. Some examples:
+
+- *"What's my current solar output?"* — live PV generation in watts
+- *"How self-sufficient am I right now?"* — autonomy and self-consumption percentages
+- *"Is my battery charging or discharging?"* — battery power flow and state of charge
+- *"How much have I fed into the grid today?"* — energy totals from the smart meter
+- *"What devices are connected to my inverter?"* — full system topology
+- *"Give me a full overview of my solar system."* — Claude combines all data sources into a summary
 
 ---
 
@@ -80,7 +112,7 @@ Developed and tested on:
 - **BYD Battery-Box Premium HV** (13.824 kWh)
 - **Fronius Smart Meter** (grid feed-in point, 3-phase)
 
-Other Fronius inverters with Solar API v1 should work. Some endpoints behave differently across models — if something doesn't work on your hardware, open an issue.
+Other Fronius inverters with Solar API v1 support should work. Some API endpoints behave differently across models — if something doesn't work on your hardware, open an issue.
 
 ---
 
