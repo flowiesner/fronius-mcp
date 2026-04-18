@@ -22,5 +22,8 @@ fronius-mcp = "fronius_mcp.cli:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/fronius_mcp"]
 
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
