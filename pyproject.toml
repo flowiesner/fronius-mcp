@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fronius-mcp"
-version = "0.1.1"
+version = "0.1.2"
 description = "MCP server for Fronius solar inverters — real-time PV, battery, and grid data in Claude"
 readme = "README.md"
 license = { file = "LICENSE" }
