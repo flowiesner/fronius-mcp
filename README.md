@@ -1,6 +1,8 @@
 # fronius-mcp
 <!-- mcp-name: io.github.flowiesner/fronius-mcp -->
 
+[![PyPI](https://img.shields.io/pypi/v/fronius-mcp)](https://pypi.org/project/fronius-mcp/)
+
 Real-time solar data from your Fronius inverter, directly in Claude.
 
 Ask things like:
