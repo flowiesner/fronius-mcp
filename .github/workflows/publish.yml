@@ -18,7 +18,7 @@ jobs:
       - name: Test
         run: pytest
 
-  publish:
+  publish-pypi:
     needs: test
     runs-on: ubuntu-latest
     environment: pypi
@@ -33,5 +33,22 @@ jobs:
         uses: astral-sh/setup-uv@v5
       - name: Build
         run: uv build
-      - name: Publish
+      - name: Publish to PyPI
         run: uv publish
+
+  publish-registry:
+    needs: publish-pypi
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download mcp-publisher
+        run: |
+          curl -L https://github.com/modelcontextprotocol/registry/releases/download/v1.6.0/mcp-publisher_linux_amd64.tar.gz \
+            | tar -xz
+          chmod +x mcp-publisher
+      - name: Login to MCP Registry
+        run: ./mcp-publisher login github-oidc
+      - name: Publish to MCP Registry
+        run: ./mcp-publisher publish
