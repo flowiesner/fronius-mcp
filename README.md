@@ -1,4 +1,5 @@
 # fronius-mcp
+<!-- mcp-name: io.github.flowiesner/fronius-mcp -->
 
 Real-time solar data from your Fronius inverter, directly in Claude.
 
