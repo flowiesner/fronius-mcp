@@ -5,11 +5,36 @@ build-backend = "hatchling.build"
 [project]
 name = "fronius-mcp"
 version = "0.1.0"
-description = "MCP server for Fronius Symo GEN24 solar system"
+description = "MCP server for Fronius solar inverters — real-time PV, battery, and grid data in Claude"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Florian Wiesner", email = "wiesner.florian@gmx.at" }]
 requires-python = ">=3.10"
+keywords = [
+    "fronius",
+    "solar",
+    "photovoltaics",
+    "inverter",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "home-automation",
+    "energy",
+    "battery",
+    "smart-meter",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Home Automation",
+    "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+]
 dependencies = [
     "mcp[cli]>=1.0.0",
     "requests>=2.31.0",
