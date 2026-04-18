@@ -44,5 +44,5 @@ def set_host(host: str) -> None:
             data = json.loads(_CONFIG_FILE.read_text(encoding="utf-8"))
         except Exception:
             pass
-    data["inverter_host"] = host
+    data["inverter_host"] = _normalize_host(host)
     _CONFIG_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")

@@ -1,5 +1,6 @@
-import socket
 from collections.abc import Callable
+
+import requests
 
 from mcp.server.fastmcp import FastMCP
 
@@ -52,18 +53,23 @@ def configure_inverter(host: str) -> str:
     Returns a confirmation message plus setup instructions, or a connectivity
     warning if the inverter cannot be reached.
     """
-    normalized = config._normalize_host(host)
-    config.set_host(normalized)
+    config.set_host(host)
+    normalized = config.get_host()
 
     try:
-        socket.setdefaulttimeout(3)
-        socket.getaddrinfo(normalized, 80)
-        status = f"Inverter configured: {normalized}. Connection check passed."
-    except OSError:
+        r = requests.get(
+            f"http://{normalized}/solar_api/v1/GetActiveDeviceInfo.cgi",
+            params={"DeviceClass": "System"},
+            timeout=3,
+        )
+        r.raise_for_status()
+        status = f"Inverter configured: {normalized}. Solar API reachable and responding."
+    except Exception:
         status = (
             f"Inverter configured: {normalized}. "
-            "Warning: could not reach the inverter right now — "
-            "check the IP and that the inverter is on the same network."
+            "Warning: could not reach the Solar API — "
+            "check the IP, confirm the inverter is on the same network, "
+            "and make sure the JSON API is enabled in the inverter's web interface."
         )
 
     return status + "\n" + _SETUP_GUIDE
