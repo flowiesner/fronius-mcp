@@ -38,7 +38,19 @@ fronius-mcp is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io)
 
 ### 1. Install uv
 
-Follow the [uv installation instructions](https://docs.astral.sh/uv/getting-started/installation/) for your platform. It's a single command and takes under a minute.
+`uv` is a fast Python package manager used to run fronius-mcp without a permanent install.
+
+**macOS / Linux:**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://astral.sh/uv/install.ps1 | iex
+```
+
+Restart your terminal after installing.
 
 ### 2. Add to Claude Desktop
 
@@ -63,6 +75,8 @@ Open your `claude_desktop_config.json` and add the `fronius` block inside `mcpSe
 | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
 | Windows (Store app) | `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\claude_desktop_config.json` |
 
+> **Tip:** If the `mcpServers` key already exists, just add the `fronius` block inside it — don't create a second `mcpServers`.
+
 ### 3. Restart Claude Desktop
 
 Close and reopen Claude Desktop so it picks up the new server config.
@@ -75,7 +89,7 @@ In a new Claude conversation, say:
 
 Claude will save your inverter's IP and confirm the connection. This is a one-time step — the address is stored in `~/.fronius-mcp.json` and persists across restarts.
 
-**Don't know your inverter's IP?** Tell Claude: *"I want to configure my Fronius inverter but I don't know the IP."* Claude will ask for the IP and, once you provide it, walk you through finding it via your router, Fronius Solar.web, or the inverter's touch display — and how to enable the Solar API in the inverter's web interface if you haven't done that yet.
+**Don't know your inverter's IP?** Tell Claude: *"I want to configure my Fronius inverter but I don't know the IP."* Claude will walk you through finding it via your router, Fronius Solar.web, or the inverter's touch display — and how to enable the Solar API in the inverter's web interface if you haven't done that yet.
 
 ---
 
