@@ -75,7 +75,7 @@ In a new Claude conversation, say:
 
 Claude will save your inverter's IP and confirm the connection. This is a one-time step — the address is stored in `~/.fronius-mcp.json` and persists across restarts.
 
-**Don't know your inverter's IP?** No problem — just ask Claude to configure the inverter without specifying an IP. The `configure_inverter` tool includes step-by-step instructions for finding it via your router, Fronius Solar.web, or the inverter's touch display, plus how to enable the Solar API in the inverter's web interface if you haven't done that yet.
+**Don't know your inverter's IP?** Tell Claude: *"I want to configure my Fronius inverter but I don't know the IP."* Claude will ask for the IP and, once you provide it, walk you through finding it via your router, Fronius Solar.web, or the inverter's touch display — and how to enable the Solar API in the inverter's web interface if you haven't done that yet.
 
 ---
 
